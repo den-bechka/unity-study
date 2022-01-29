@@ -5,37 +5,58 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public GameObject Player;
-
-    private readonly float step = 2f;
-    private readonly float negativeStep = -1;
-    private readonly float maxScaling = 4;
+    public Rigidbody2D rigidbody;
+    public GroundDetect groundDetection;
+  
+    private float force = 10; 
+    
+    private readonly float step = 5f;
+    private readonly float minHeight = -20;
 
     private void Update()
     {
-        this.Player.transform.localPosition += this.getPosition();
-        this.Player.transform.localScale    += this.GetScale();
-        
-        this.Player.transform.Rotate(0f, 0f, -1.3f);
+        if (Input.GetKey(KeyCode.A))
+        {
+           this.MoveLeft();
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            this.MoveRight();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && this.groundDetection.isGround)
+        {
+            this.rigidbody.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+        }
+
+        if (transform.position.y < this.minHeight)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    private void MoveLeft()
+    {
+        this.transform.localPosition -= this.getPosition();
     }
     
+    private void MoveRight()
+    {
+        this.transform.localPosition += this.getPosition();
+    }
+
     private Vector3 getPosition()
     {
         return this.step * Vector3.right * Time.deltaTime;
-    }
-
-    private Vector3 GetScale()
-    {
-        float koof = this.Player.transform.localScale.x >= this.maxScaling 
-            ? this.negativeStep
-            : Math.Abs(this.negativeStep);
-        
-        float scaling = koof * Time.deltaTime;
-        
-        return new Vector3(
-            scaling,
-            scaling,
-            scaling
-        );
     }
 }
