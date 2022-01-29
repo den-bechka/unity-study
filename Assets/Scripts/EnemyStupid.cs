@@ -4,6 +4,7 @@ public class EnemyStupid : MonoBehaviour
 {
     public GameObject leftBorder;
     public GameObject rightBorder;
+    public GameObject avatar;
     public Rigidbody2D gitidbody;
 
     private float speed = 3;
@@ -19,6 +20,11 @@ public class EnemyStupid : MonoBehaviour
             if (this.transform.position.x < this.leftBorder.transform.position.x)
             {
                 this.isLeftDirectionMove = !this.isLeftDirectionMove;
+                
+                if (this.avatar)
+                {
+                    this.avatar.transform.localScale = new Vector3(1, 1, 1);   
+                }
             }
         }
         else
@@ -28,6 +34,11 @@ public class EnemyStupid : MonoBehaviour
             if (this.transform.position.x > this.rightBorder.transform.position.x)
             {
                 this.isLeftDirectionMove = !this.isLeftDirectionMove;
+                
+                if (this.avatar) 
+                {
+                    this.avatar.transform.localScale = new Vector3(-1, 1, 1);   
+                }
             }
         }
     }

@@ -7,7 +7,8 @@ public class PlayerMove : MonoBehaviour
 {
     public Rigidbody2D rigidbody;
     public GroundDetect groundDetection;
-  
+    public GameObject playerAvatar; 
+    
     private float force = 10; 
     
     private readonly float step = 5f;
@@ -48,11 +49,19 @@ public class PlayerMove : MonoBehaviour
     private void MoveLeft()
     {
         this.transform.localPosition -= this.getPosition();
+        if (this.playerAvatar)
+        {
+            this.playerAvatar.transform.localScale = new Vector3(-1, 1, 1);   
+        }
     }
     
     private void MoveRight()
     {
         this.transform.localPosition += this.getPosition();
+        if (this.playerAvatar)
+        {
+            this.playerAvatar.transform.localScale = new Vector3(1, 1, 1);   
+        }
     }
 
     private Vector3 getPosition()
